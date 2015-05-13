@@ -12,6 +12,8 @@
     "express": "~4.12.2",
     "jade": "~1.9.2",
     "morgan": "~1.5.1",
+    "mysql": "^2.6.2",
+    "orm": "^2.1.24",
     "serve-favicon": "~2.2.0"
   },
   "description": "saves data from DeLorme inReach IPC Outbound",
