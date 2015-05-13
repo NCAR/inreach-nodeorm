@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Latest events
+
+  ul
+    -for (var i in events)
+      - var event = events[i]
+      li
+        #{event.id} : #{event.imei} : #{event.latitude}

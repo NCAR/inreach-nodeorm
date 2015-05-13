@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var saver = require('../saver');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/', saver.get);
+
+/* POST home page. */
+router.post('/', saver.save);
 
 module.exports = router;
