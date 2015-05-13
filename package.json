@@ -1,5 +1,5 @@
 {
-  "name": "inreach-saver",
+  "name": "inreach-portal-nodeorm",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -16,11 +16,11 @@
     "orm": "^2.1.24",
     "serve-favicon": "~2.2.0"
   },
-  "description": "saves data from DeLorme inReach IPC Outbound",
+  "description": "DeLorme inReach Connect Portal for IPC Outbound service using Node.js, Express, and node-orm2",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "file:///net/cds/git/inreach-saver"
+    "url": "file:///net/cds/git/emdac/inreach-portal-nodeorm"
   },
   "author": "John J. Allison <jja@ucar.edu>",
   "license": "ISC"
