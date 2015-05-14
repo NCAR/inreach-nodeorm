@@ -15,6 +15,9 @@ var routes = require('./routes/index');
 
 var app = express();
 
+var helpers = require('./helpers');
+app.set('helpers',helpers);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

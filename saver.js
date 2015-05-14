@@ -11,7 +11,6 @@ exports.save = function (req, res, next) {
 
   req.models.inreachEvent.create(events, function (err,items) {
     if (err) return next(err);
-    console.log(items);
     res.send('OK');
   });
 };
@@ -30,7 +29,7 @@ exports.get = function (req, res, next) {
 
      req.models.inreachEvent.find({id:ids}).all(function(err,events) {
        if (err) return next(err);
-       res.render('events', { listType: 'Latest', events: events });
+       res.render('events', { listType: 'Latest', events: events, helpers: req.app.get('helpers')});
      });
    });
 };

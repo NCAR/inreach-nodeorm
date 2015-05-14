@@ -20,7 +20,7 @@ block content
       - var event = events[i]
       tr
         td= event.imei
-        td= event.messageCode
+        td #{event.messageCode}: #{helpers.messageCode(event.messageCode)}
         td= event.timeStamp
         td= event.latitude
         td= event.longitude
