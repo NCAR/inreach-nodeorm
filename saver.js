@@ -1,14 +1,14 @@
 exports.save = function (req, res, next) {
   if (!req.body || !req.body['Events']) return res.sendStatus(400);
 
-  console.log(JSON.stringify(req.body.Events,null,2));
+  console.log(req.body);
+  //console.log(JSON.stringify(req.body.Events,null,2));
 
   var events = [];
   req.body['Events'].forEach(function(it){
     events.push(squashEvent(it));
   });
 
-  console.log(''+req.models);
   req.models.inreachEvent.create(events, function (err,items) {
     if (err) return next(err);
     console.log(items);
@@ -24,17 +24,13 @@ exports.get = function (req, res, next) {
    'select i.id from ( select * from inreach_event order by message_time desc ) as i group by imei',
    function(err,data) {
      if (err) return next(err);
-     console.log('data isa '+(typeof data));
-     console.log('data Array '+(data instanceof Array));
-     console.log(JSON.stringify(data,null,2));
 
      var ids = [];
      data.forEach(function(it) { ids.push(it.id); });
 
      req.models.inreachEvent.find({id:ids}).all(function(err,events) {
        if (err) return next(err);
-       console.log(JSON.stringify(events,null,2));
-       res.render('latest', { events: events });
+       res.render('events', { listType: 'Latest', events: events });
      });
    });
 };
