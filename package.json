@@ -14,6 +14,7 @@
     "morgan": "~1.5.1",
     "mysql": "^2.6.2",
     "orm": "^2.1.24",
+    "orm-timestamps": "^0.5.2",
     "serve-favicon": "~2.2.0"
   },
   "description": "DeLorme inReach Connect Portal for IPC Outbound service using Node.js, Express, and node-orm2",

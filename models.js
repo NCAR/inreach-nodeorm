@@ -1,7 +1,13 @@
+var ormts = require('orm-timestamps');
+
 exports.setup = function (db, models, next) {
 
+  db.use(ormts, {
+    createdProperty: 'row_create_time',
+    modifiedProperty: 'row_revise_time'
+  });
+
   models.inreachEvent = db.define('inreachEvent',{
-    //id : { type: 'integer', key: true },
     imei : { type: 'text' },
     messageCode : { type: 'integer', mapsTo: 'message_code' },
     freeText : { type: 'text', mapsTo: 'free_text' },
@@ -25,13 +31,23 @@ exports.setup = function (db, models, next) {
 
     //payload // encryption binary data (unused)
 
-    rowCreateContactId : { type: 'integer', mapsTo: 'row_create_contact_id' },
-    rowCreateTime : { type: 'date', time: true, mapsTo: 'row_create_time' },
-    rowReviseContactId : { type: 'integer', mapsTo: 'row_revise_contact_id' },
-    rowReviseTime : { type: 'date', time: true, mapsTo: 'row_revise_time' }
+    //rowCreateContactId : { type: 'integer', mapsTo: 'row_create_contact_id' },
+    //rowCreateTime : { type: 'date', time: true, mapsTo: 'row_create_time' },
+    //rowReviseContactId : { type: 'integer', mapsTo: 'row_revise_contact_id' },
+    //rowReviseTime : { type: 'date', time: true, mapsTo: 'row_revise_time' }
   },
   {
-    collection : 'inreach_event'
+    collection : 'inreach_event',
+    timestamp: true
+  });
+
+  models.messageCode = db.define('messageCode',{
+    name : { type: 'text' },
+    description : { type: 'text' },
+  },
+  {
+    collection : 'message_code',
+    timestamp: true
   });
 
   next();
