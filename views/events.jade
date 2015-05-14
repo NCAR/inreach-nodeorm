@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1 #{listType} events
+
+  table(border='1')
+    tr
+      th imei
+      th messageCode
+      th timeStamp
+      th latitude
+      th longitude
+      th altitude
+      th gpsFix code
+      th course(deg)
+      th speed
+      th freeText
+
+    -for (var i in events)
+      - var event = events[i]
+      tr
+        td= event.imei
+        td= event.messageCode
+        td= event.timeStamp
+        td= event.latitude
+        td= event.longitude
+        td
+          |#{event.altitude}&nbsp;m
+          br
+          |#{Math.round(event.altitude * 3.2808399)}&nbsp;ft
+        td= event.gpsFix
+        td= event.course
+        td
+          |#{event.speed}&nbsp;kph
+          br
+          |#{Math.round(event.speed * 0.62137119)}&nbsp;mph
+        td= event.freeText
