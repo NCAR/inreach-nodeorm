@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(orm.express("mysql://inreach:delorme@localhost/inreach_dev?pool=true", {
+app.use(orm.express("mysql://inreach:delorme@localhost/inreach?pool=true", {
   define: models.setup
 }));
 
