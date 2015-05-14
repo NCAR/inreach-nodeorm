@@ -1,8 +1,5 @@
 exports.save = function (req, res, next) {
-  if (!req.body || !req.body['Events']) return res.sendStatus(400);
-
-  console.log(req.body);
-  //console.log(JSON.stringify(req.body.Events,null,2));
+  if (!req.body || !req.body['Events']) return res.status(400).send('No events');
 
   var events = [];
   req.body['Events'].forEach(function(it){
@@ -11,7 +8,7 @@ exports.save = function (req, res, next) {
 
   req.models.inreachEvent.create(events, function (err,items) {
     if (err) return next(err);
-    res.send('OK');
+    res.status(200).json({status:'OK'});
   });
 };
 

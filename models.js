@@ -1,4 +1,6 @@
+var orm = require('orm');
 var ormts = require('orm-timestamps');
+var enforce = orm.enforce;
 
 exports.setup = function (db, models, next) {
 
@@ -38,7 +40,16 @@ exports.setup = function (db, models, next) {
   },
   {
     collection : 'inreach_event',
-    timestamp: true
+    timestamp : true,
+    validations : {
+      imei : [ enforce.required(),
+               enforce.notEmptyString(),
+               enforce.ranges.length(1, undefined),
+             ],
+      messageCode : [ enforce.required(), enforce.ranges.number(0, undefined) ],
+      latitude : [ enforce.required(), enforce.ranges.number(-90.0, 90.0) ],
+      longitude : [ enforce.required(), enforce.ranges.number(-180.0, 180.0) ],
+    }
   });
 
   models.messageCode = db.define('messageCode',{
@@ -47,7 +58,7 @@ exports.setup = function (db, models, next) {
   },
   {
     collection : 'message_code',
-    timestamp: true
+    timestamp : true
   });
 
   next();
