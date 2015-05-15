@@ -8,6 +8,7 @@ var orm = require('orm');
 
 var saver = require('./saver');
 var models = require('./models');
+var config = require('./conf/index');
 
 var routes = require('./routes/index');
 
@@ -54,7 +55,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 orm.settings.set('instance.returnAllErrors', true);
-app.use(orm.express("mysql://inreach:delorme@localhost/inreach?pool=true", {
+app.use(orm.express(config.databaseUrl(), {
   define: models.setup
 }));
 
@@ -81,7 +82,7 @@ if (app.get('env') === 'production') {
       new winston.transports.File({
         level: 'debug',
         timestamp: true,
-        filename: path.join(__dirname, 'logs', 'error_log.json'),
+        filename: path.join(__dirname, 'log', 'error_log.json'),
         maxsize: 104857600,
         maxFiles: 10,
       })
