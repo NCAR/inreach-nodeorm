@@ -1,0 +1,23 @@
+To use forever as a daemon process controller/monitor,
+put something like this in crontab (lines split for readability):
+
+  NODE_ENV=production
+
+  @reboot /usr/local/bin/forever start
+  -m 10 --append
+  -l /usr/local/inreach-portal-nodeorm/log/forever.log
+  -o /usr/local/inreach-portal-nodeorm/log/inreach-portal.out
+  -e /usr/local/inreach-portal-nodeorm/log/inreach-portal.err
+  --sourceDir /usr/local/inreach-portal-nodeorm
+  --workingDir /usr/local/inreach-portal-nodeorm
+  --watchDirectory /usr/local/inreach-portal-nodeorm
+  --watchIgnore 'log/**'
+  --watchIgnore '.*'
+  --watchIgnore 'doc/**'
+  --plain --no-colors
+  bin/www
+
+Other important environment variables are shown below
+with their defaults:
+  TZ=UTC
+  INREACH_PORT=7997
