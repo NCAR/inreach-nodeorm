@@ -9,10 +9,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `inreach_event`
---
-
 DROP TABLE IF EXISTS `inreach_event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -139,7 +135,6 @@ CREATE TABLE `platform_imei` (
 --  CONSTRAINT `platform_imei_1` FOREIGN KEY (`platform_id`) REFERENCES `zith9`.`platform` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

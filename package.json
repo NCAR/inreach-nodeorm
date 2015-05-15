@@ -10,12 +10,14 @@
     "cookie-parser": "~1.3.4",
     "debug": "~2.1.1",
     "express": "~4.12.2",
+    "express-winston": "^0.3.0",
     "jade": "~1.9.2",
     "morgan": "~1.5.1",
     "mysql": "^2.6.2",
     "orm": "^2.1.24",
     "orm-timestamps": "^0.5.2",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "winston": "^1.0.0"
   },
   "description": "DeLorme inReach Connect Portal for IPC Outbound service using Node.js, Express, and node-orm2",
   "main": "app.js",
