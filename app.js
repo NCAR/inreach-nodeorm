@@ -1,5 +1,7 @@
 process.env.TZ='UTC';
 
+var fs = require('fs-ext');
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -48,6 +50,22 @@ app.use(function(req, res, next) {
     req.rawBody += chunk;
   });
 
+  var logfile = path.join(__dirname, 'log', 'rawbody_log');
+  req.on('end', function() {
+    fs.open(logfile, 'w+', function(err, fd) {
+      fs.flock(fd, 'ex', function(err) {
+        if (err) {
+          console.log("Couldn't lock rawbody logfile");
+        } else if (req.rawBody.length > 0) {
+          fs.writeSync(fd,'{"receivedTime":'+Date.now()+',"data":');
+          fs.writeSync(fd,req.rawBody);
+          fs.writeSync(fd,"}\n");
+        }
+        fs.closeSync(fd);
+      });
+    });
+  });
+
   next();
 });
 
@@ -82,7 +100,7 @@ if (app.get('env') === 'production') {
       new winston.transports.File({
         level: 'debug',
         timestamp: true,
-        filename: path.join(__dirname, 'log', 'error_log.json'),
+        filename: path.join(__dirname, 'log', 'error_log_json'),
         maxsize: 104857600,
         maxFiles: 10,
       })
