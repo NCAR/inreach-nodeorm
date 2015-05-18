@@ -23,7 +23,7 @@ app.set('helpers',helpers);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 if (app.get('env') === 'development') {
   var logger = require('morgan');
