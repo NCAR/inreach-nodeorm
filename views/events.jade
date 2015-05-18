@@ -2,39 +2,38 @@ extends layout
 
 block content
   if 0 === events.length
-    No events
-    return
+    h1 No events
+  else
+    h1 #{listType} events
 
-  h1 #{listType} events
-
-  table(border='1')
-    tr
-      th imei
-      th messageCode
-      th timeStamp
-      th latitude
-      th longitude
-      th altitude
-      th gpsFix code
-      th course(deg)
-      th speed
-      th freeText
-
-    each event in events
+    table(border='1')
       tr
-        td= event.imei
-        td #{event.messageCode}: #{helpers.messageCode(event.messageCode)}
-        td= event.timeStamp
-        td= event.latitude
-        td= event.longitude
-        td
-          |#{event.altitude}&nbsp;m
-          br
-          |#{Math.round(event.altitude * 3.2808399)}&nbsp;ft
-        td= event.gpsFix
-        td= event.course
-        td
-          |#{event.speed}&nbsp;kph
-          br
-          |#{Math.round(event.speed * 0.62137119)}&nbsp;mph
-        td= event.freeText
+        th imei
+        th messageCode
+        th timeStamp
+        th latitude
+        th longitude
+        th altitude
+        th gpsFix code
+        th course(deg)
+        th speed
+        th freeText
+
+      each event in events
+        tr
+          td= event.imei
+          td #{event.messageCode}: #{helpers.messageCode(event.messageCode)}
+          td= event.timeStamp
+          td= event.latitude
+          td= event.longitude
+          td
+            |#{event.altitude}&nbsp;m
+            br
+            |#{Math.round(event.altitude * 3.2808399)}&nbsp;ft
+          td= event.gpsFix
+          td= event.course
+          td
+            |#{event.speed}&nbsp;kph
+            br
+            |#{Math.round(event.speed * 0.62137119)}&nbsp;mph
+          td= event.freeText
