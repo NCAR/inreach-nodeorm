@@ -1,0 +1,48 @@
+// stoopid quick config
+// EXAMPLE for development use
+
+var database = {
+  development : {
+    user : 'inreach',
+    password : 'XXX',
+    host : 'localhost',
+    schema : 'inreach',
+    options : {
+      pool : true
+    }
+  },
+
+  production : {
+    user : 'inreach',
+    password : 'XXX',
+    host : 'XXX',
+    schema : 'inreach',
+    options : {
+      pool : true
+    }
+  },
+}[process.env.NODE_ENV || 'development'];
+
+exports.databaseUrl = function() {
+  var url = 'mysql://' + database.user + ':' + database.password + '@' + database.host + '/' + database.schema;
+  var urlOpts = '?';
+  for (key in database.options) {
+    urlOpts += key + '=' + database.options[key]
+  }
+  if (urlOpts.length > 1) url += urlOpts
+  return url;
+};
+
+
+// EXAMPLE for production install can simplify the "database" var:
+/*
+var database = {
+  user : 'inreach',
+  password : 'XXX',
+  host : 'XXX',
+  schema : 'inreach',
+  options : {
+  pool : true
+  }
+};
+*/

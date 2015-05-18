@@ -1,0 +1,11 @@
+= Install inreach-portal =
+
+Create a database with schema from "db.sql"
+and user with "select,insert,update" privileges
+
+See the example config files in conf/
+
+See the example scripts in etc/
+
+You also need to allow user "inreach" to write to the log/
+directory, perhaps with "chown inreach log"
