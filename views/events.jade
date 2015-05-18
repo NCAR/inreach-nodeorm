@@ -1,6 +1,10 @@
 extends layout
 
 block content
+  if 0 === events.length
+    No events
+    return
+
   h1 #{listType} events
 
   table(border='1')
@@ -16,8 +20,7 @@ block content
       th speed
       th freeText
 
-    -for (var i in events)
-      - var event = events[i]
+    each event in events
       tr
         td= event.imei
         td #{event.messageCode}: #{helpers.messageCode(event.messageCode)}
