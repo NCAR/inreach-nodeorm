@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# chkconfig: 3 95 20
+# description: inReach portal daemon
+# processname: inreach-portal
+
+. /etc/rc.d/init.d/functions
+
+APPROOT=/usr/local/inreach/inreach-portal-nodeorm
+cd $APPROOT
+
+SCRIPT=bin/www
+
+export INREACH_PORT;INREACH_PORT=7997
+export NODE_PATH;NODE_PATH=$APPROOT/node_modules
+export NODE_ENV;NODE_ENV=production
+export TZ;TZ=UTC
+export PATH;PATH=/usr/local/bin:$PATH
+
+start() {
+  daemon --user=inreach \
+  /usr/local/bin/forever start \
+  -m 3 --append \
+  -l $APPROOT/log/forever.log \
+  -o $APPROOT/log/inreach-portal.out \
+  -e $APPROOT/log/inreach-portal.err \
+  --sourceDir=$APPROOT \
+  --workingDir=$APPROOT \
+  --watch \
+  --watchDirectory=$APPROOT \
+  --plain --no-colors \
+  --minUptime=3000 --spinSleepTime=3000 \
+  --id inreach-portal \
+  $SCRIPT
+}
+
+stop() {
+  /sbin/runuser -s /bin/sh -c '/usr/local/bin/forever stop inreach-portal' inreach
+}
+
+restart() {
+  /sbin/runuser -s /bin/sh -c '/usr/local/bin/forever restart inreach-portal' inreach
+}
+
+case "$1" in
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+restart)
+  restart
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop|restart>"
+  exit 1
+  ;;
+esac
