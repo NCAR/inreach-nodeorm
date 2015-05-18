@@ -57,7 +57,7 @@ exports.setup = function (db, models, next) {
     description : { type: 'text' },
   },
   {
-    collection : 'message_code',
+    collection : 'inreach_message_code',
     timestamp : true
   });
 
