@@ -1,0 +1,10 @@
+Example scripts:
+
+init.d/inreach-portal
+  - example init.d service script
+
+hooks/post-receive
+  - example git hook for push-deploy workflow
+  - does not restart daemon since the "forever" monitor
+    used in the example init.d script will watch for
+    changes and restart
