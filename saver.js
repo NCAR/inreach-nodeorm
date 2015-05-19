@@ -15,7 +15,7 @@ exports.save = function (req, res, next) {
   });
 
   req.models.inreachEvent.create(events, function (err,items) {
-    if (err) return next(err);
+    if (err) throw(err);
     res.status(200).json({status:'OK'});
   });
 };
@@ -27,13 +27,13 @@ exports.get = function (req, res, next) {
   req.db.driver.execQuery(
    'select i.id from ( select * from inreach_event order by message_time desc ) as i group by imei',
    function(err,data) {
-     if (err) return next(err);
+     if (err) throw(err);
 
      var ids = [];
      data.forEach(function(it) { ids.push(it.id); });
 
      req.models.inreachEvent.find({id:ids}).all(function(err,events) {
-       if (err) return next(err);
+       if (err) throw(err);
        res.render('events', { listType: 'Latest', events: events, helpers: req.app.get('helpers')});
      });
    });
