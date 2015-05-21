@@ -1,7 +1,7 @@
 exports.save = function (req, res, next) {
   if (!req.body || !req.body['Events']) return res.status(400).send('No events');
 
-  if ('300234010961140' === req.body.imei)
+  if ('300234010961140' == req.body.imei)
     return res.status(200).json({status:"Pretend it's OK that this bad data arrived."});
 
   // TODO: accept data only from known hosts/subnets
