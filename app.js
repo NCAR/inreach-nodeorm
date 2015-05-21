@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
 
   var logfile = path.join(__dirname, 'log', 'rawbody_log');
   req.on('end', function() {
-    fs.open(logfile, 'w+', function(err, fd) {
+    fs.open(logfile, 'a', function(err, fd) {
       fs.flock(fd, 'ex', function(err) {
         if (err) {
           console.log("Couldn't lock rawbody logfile");
