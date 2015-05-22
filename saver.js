@@ -1,22 +1,27 @@
 exports.save = function (req, res, next) {
   if (!req.body || !req.body['Events']) return res.status(400).send('No events');
 
-  if ('300234010961140' == req.body.imei)
-    return res.status(200).json({status:"Pretend it's OK that this bad data arrived."});
-
   // TODO: accept data only from known hosts/subnets
-  //       e.g. 50.57.12.84 app1.delorme.com
-
-  // TODO: accept data only for known IMEIs
+  //       e.g. 50.57.12.84 app1.delorme.com (50.57.12.0/255.255.255.0)
 
   var events = [];
   req.body['Events'].forEach(function(it){
-    events.push(squashEvent(it));
+    // TODO: accept data only for known IMEIs
+
+    // don't accept data for this bogus IMEI that comes 1x/day
+    if ('300234010961140' != it.imei)
+      events.push(squashEvent(it));
   });
 
+  if (events.length === 0)
+    return res.status(200).json({status:"Pretend it's OK that no or bad data arrived."});
+
   req.models.inreachEvent.create(events, function (err,items) {
-    if (err) throw(err);
-    res.status(200).json({status:'OK'});
+    if (err) {
+      res.status(400).send(err.toString());
+    } else {
+      res.status(200).json({status:'OK'});
+    }
   });
 };
 
