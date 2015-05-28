@@ -9,8 +9,14 @@ exports.save = function (req, res, next) {
     // TODO: accept data only for known IMEIs
 
     // don't accept data for this bogus IMEI that comes 1x/day
-    if ('300234010961140' != it.imei)
-      events.push(squashEvent(it));
+    if ('300234010961140' != it.imei) {
+      var event = squashEvent(it);
+
+      // only save good latlons; in particular 0,0 is valid only with position reports
+      // (seems to be a missing value for other messageCode's like  20/Mail Check)
+      if (event.message_code === 0 || event.latitude != 0)
+        events.push(event);
+    }
   });
 
   if (events.length === 0)
