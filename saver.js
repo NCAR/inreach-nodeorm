@@ -14,7 +14,7 @@ exports.save = function (req, res, next) {
 
       // only save good latlons; in particular 0,0 is valid only with position reports
       // (seems to be a missing value for other messageCode's like  20/Mail Check)
-      if (event.message_code === 0 || event.latitude != 0)
+      if (event.message_code === 0 || event.latitude != 0 || event.longitude != 0)
         events.push(event);
     }
   });
