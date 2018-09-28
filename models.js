@@ -30,13 +30,9 @@ exports.setup = function (db, models, next) {
     autonomous : { type: 'integer' },
     lowBattery : { type: 'integer', mapsTo: 'low_battery' },
     intervalChange : { type: 'integer', mapsTo: 'interval_change' },
+    resetDetected : { type: 'integer', mapsTo: 'reset_detected' },
 
-    //payload // encryption binary data (unused)
-
-    //rowCreateContactId : { type: 'integer', mapsTo: 'row_create_contact_id' },
-    //rowCreateTime : { type: 'date', time: true, mapsTo: 'row_create_time' },
-    //rowReviseContactId : { type: 'integer', mapsTo: 'row_revise_contact_id' },
-    //rowReviseTime : { type: 'date', time: true, mapsTo: 'row_revise_time' }
+    //payload // encryption Base64-encoded binary data (unused)
   },
   {
     collection : 'inreach_event',
