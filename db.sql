@@ -30,6 +30,7 @@ CREATE TABLE `inreach_event` (
   `autonomous` int(11) DEFAULT NULL,
   `low_battery` int(11) DEFAULT NULL,
   `interval_change` int(11) DEFAULT NULL,
+  `reset_detected` int(11) DEFAULT NULL,
   `row_create_time` timestamp NOT NULL DEFAULT '1970-01-01 00:00:01',
   `row_revise_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
