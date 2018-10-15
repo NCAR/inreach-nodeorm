@@ -5,7 +5,20 @@ and user with "select,insert,update" privileges
 
 See the example config files in conf/
 
-See the example scripts in etc/
+You also need to setup a system/daemon/nologin user/group "inreach"
+and allow the user to write to the log/ directory
+(either "chown inreach log" or "chgrp inreach log").
 
-You also need to allow user "inreach" to write to the log/
-directory, perhaps with "chown inreach log"
+We run the server daemon with "forever" from npm:
+
+    npm install forever -g
+
+forever maintains its state in `../.forever` -- if you test
+the daemon as another user, you'll need to delete this dir
+before running as a system service so user inreach can write it.
+
+See `etc/init.d/inreach-portal` or `etc/inreach.service`
+for system integration.
+
+Deploy via "git push" can be accomplished with help
+from `etc/hooks/post-receive`

@@ -1,0 +1,50 @@
+[Unit]
+Description=InReach data ingest service
+RequiresMountsFor=/usr/local/inreach
+After=network-online.target
+#OnFailure=stopped-email@%n.service
+
+[Service]
+Type=forking
+User=inreach
+Group=inreach
+LimitCORE=0
+SyslogIdentifier=inreach
+WorkingDirectory=/usr/local/inreach/inreach-portal-nodeorm
+
+# forever is supposed to keep things going
+#Restart=on-failure
+#RestartSec=10s
+
+Environment=INREACH_PORT=7997
+Environment=NODE_PATH=/usr/local/inreach/inreach-portal-nodeorm/node_modules
+Environment=NODE_ENV=production
+Environment=TZ=UTC
+Environment=PATH=/usr/local/bin:/usr/bin:/opt/local/bin
+
+ExecStart=/usr/local/bin/forever start \
+  -m 3 --append \
+  -l /usr/local/inreach/inreach-portal-nodeorm/log/forever.log \
+  -o /usr/local/inreach/inreach-portal-nodeorm/log/inreach-portal.out \
+  -e /usr/local/inreach/inreach-portal-nodeorm/log/inreach-portal.err \
+  --sourceDir=/usr/local/inreach/inreach-portal-nodeorm \
+  --workingDir=/usr/local/inreach/inreach-portal-nodeorm \
+  --watch \
+  --watchDirectory=/usr/local/inreach/inreach-portal-nodeorm \
+  --plain --no-colors \
+  --minUptime=3000 --spinSleepTime=3000 \
+  --id inreach-portal \
+  bin/www
+
+# "infinity" doesn't work, use 0 to disable; "man systemd.service"
+TimeoutStartSec=0
+
+# how long to wait for a stop, e.g. "30" (seconds), "5min 20s"
+# "infinity" doesn't work, use 0 to disable; "man systemd.service"
+# https://www.freedesktop.org/software/systemd/man/systemd.service.html#TimeoutStopSec=
+TimeoutStopSec=5min
+
+ExecStop=/usr/local/bin/forever stop inreach-portal
+
+[Install]
+WantedBy=multi-user.target

@@ -6,7 +6,7 @@ Uses Node.js, Express, and node-orm2.
 
 == Documentation ==
 
-See [docs/IPC_Outbound.pdf]()
+See [doc/IPC_Outbound.pdf]()
 
   * https://forums.garmin.com/forum/on-the-trail/inreach/inreach-web-api
   * https://support.garmin.com/en-US/?faq=Oa5mP2D5Zf7NZ8P17ATN58
@@ -20,3 +20,6 @@ See [docs/IPC_Outbound.pdf]()
   * http://www.inreachdelorme.com/
   * http://files.delorme.com/support/inreachwebdocs/IPC_Outbound.pdf
 
+== Deployment ==
+
+See `doc/INSTALL.txt`
