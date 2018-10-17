@@ -1,4 +1,5 @@
 .git/**
+README.md
 doc/**
 etc/**
 log/**
