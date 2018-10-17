@@ -11,7 +11,19 @@ and allow the user to write to the log/ directory
 
 We run the server daemon with "forever" from npm:
 
-    npm install forever -g
+    npm install -g forever@0.14.2
+
+If you're using a yum-installed node/npm then you'll need "sudo".
+If you're using forever version >0.14.2 then you have to
+manually fix the installed forever-monitor code to properly
+log the change that causes a restart. See:
+
+    https://github.com/foreverjs/forever-monitor/pull/144/files
+
+You may also be scolded by npm about package "minimatch". If so,
+just globablly install the latest (again perhaps with sudo):
+
+    npm install -g minimatch
 
 forever maintains its state in `../.forever` -- if you test
 the daemon as another user, you'll need to delete this dir
