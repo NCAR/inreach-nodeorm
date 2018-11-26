@@ -20,8 +20,22 @@ log the change that causes a restart. See:
 
     https://github.com/foreverjs/forever-monitor/pull/144/files
 
+*** Be careful about upgrading forever. It's forever-monitor
+subpackage depends upon an old version of ps-tree which
+in turn depends upon an old version of event-stream.
+Newer event-stream versions (e.g. 3.3.x) have security problems
+due to unknown injected code from the flatmap-stream package.
+Check version numbers to verify.
+
+    npm -g ls event-stream flatmap-stream
+    https://github.com/indexzero/ps-tree/issues/33
+    https://github.com/dominictarr/event-stream/issues/116
+
+:(
+
 You may also be scolded by npm about package "minimatch". If so,
-just globablly install the latest (again perhaps with sudo):
+just globablly install the latest (or whatever version it wants)
+(again perhaps with sudo):
 
     npm install -g minimatch
 
