@@ -5,16 +5,19 @@
  * MIT Licensed
  */
 
+'use strict';
+
 /**
  * Module dependencies.
  * @api private
  */
 
+var Buffer = require('safe-buffer').Buffer
 var contentDisposition = require('content-disposition');
 var contentType = require('content-type');
 var deprecate = require('depd')('express');
+var flatten = require('array-flatten');
 var mime = require('send').mime;
-var basename = require('path').basename;
 var etag = require('etag');
 var proxyaddr = require('proxy-addr');
 var qs = require('qs');
@@ -29,13 +32,7 @@ var querystring = require('querystring');
  * @api private
  */
 
-exports.etag = function (body, encoding) {
-  var buf = !Buffer.isBuffer(body)
-    ? new Buffer(body, encoding)
-    : body;
-
-  return etag(buf, {weak: false});
-};
+exports.etag = createETagGenerator({ weak: false })
 
 /**
  * Return weak ETag for `body`.
@@ -46,13 +43,7 @@ exports.etag = function (body, encoding) {
  * @api private
  */
 
-exports.wetag = function wetag(body, encoding){
-  var buf = !Buffer.isBuffer(body)
-    ? new Buffer(body, encoding)
-    : body;
-
-  return etag(buf, {weak: true});
-};
+exports.wetag = createETagGenerator({ weak: true })
 
 /**
  * Check if `path` looks absolute.
@@ -63,9 +54,9 @@ exports.wetag = function wetag(body, encoding){
  */
 
 exports.isAbsolute = function(path){
-  if ('/' == path[0]) return true;
-  if (':' == path[1] && '\\' == path[2]) return true;
-  if ('\\\\' == path.substring(0, 2)) return true; // Microsoft Azure absolute path
+  if ('/' === path[0]) return true;
+  if (':' === path[1] && ('\\' === path[2] || '/' === path[2])) return true; // Windows device path
+  if ('\\\\' === path.substring(0, 2)) return true; // Microsoft Azure absolute path
 };
 
 /**
@@ -76,18 +67,8 @@ exports.isAbsolute = function(path){
  * @api private
  */
 
-exports.flatten = function(arr, ret){
-  ret = ret || [];
-  var len = arr.length;
-  for (var i = 0; i < len; ++i) {
-    if (Array.isArray(arr[i])) {
-      exports.flatten(arr[i], ret);
-    } else {
-      ret.push(arr[i]);
-    }
-  }
-  return ret;
-};
+exports.flatten = deprecate.function(flatten,
+  'utils.flatten: use array-flatten npm module instead');
 
 /**
  * Normalize the given `type`, for example "html" becomes "text/html".
@@ -149,7 +130,7 @@ function acceptParams(str, index) {
 
   for (var i = 1; i < parts.length; ++i) {
     var pms = parts[i].split(/ *= */);
-    if ('q' == pms[0]) {
+    if ('q' === pms[0]) {
       ret.quality = parseFloat(pms[1]);
     } else {
       ret.params[pms[0]] = pms[1];
@@ -216,7 +197,7 @@ exports.compileQueryParser = function compileQueryParser(val) {
       fn = newObject;
       break;
     case 'extended':
-      fn = qs.parse;
+      fn = parseExtendedQueryString;
       break;
     case 'simple':
       fn = querystring.parse;
@@ -280,6 +261,38 @@ exports.setCharset = function setCharset(type, charset) {
   // format type
   return contentType.format(parsed);
 };
+
+/**
+ * Create an ETag generator function, generating ETags with
+ * the given options.
+ *
+ * @param {object} options
+ * @return {function}
+ * @private
+ */
+
+function createETagGenerator (options) {
+  return function generateETag (body, encoding) {
+    var buf = !Buffer.isBuffer(body)
+      ? Buffer.from(body, encoding)
+      : body
+
+    return etag(buf, options)
+  }
+}
+
+/**
+ * Parse an extended query string with qs.
+ *
+ * @return {Object}
+ * @private
+ */
+
+function parseExtendedQueryString(str) {
+  return qs.parse(str, {
+    allowPrototypes: true
+  });
+}
 
 /**
  * Return new empty object.
