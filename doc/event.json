@@ -1,0 +1,29 @@
+{
+"Version": "2.0",
+"Events": [
+{
+"imei": "100000000000001",
+"messageCode": 3,
+"freeText": "On my way.",
+"timeStamp": 1323784607376,
+"addresses": [
+{ "address": "2075752244" },
+{ "address": "product.support@garmin.com" }
+],
+"point": {
+"latitude": 43.8078653812408,
+"longitude": -70.1636695861816,
+"altitude": 45,
+"gpsFix": 2,
+"course": 45,
+"speed": 50
+},
+"status": {
+"autonomous": 0,
+"lowBattery": 1,
+"intervalChange": 0,
+"resetDetected": 0
+}
+}
+]
+}
