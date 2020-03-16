@@ -1,13 +1,58 @@
-= Install inreach-portal =
+== Install notes ==
 
 Create a database with schema from "db.sql"
 and user with "select,insert,update" privileges
 
 See the example config files in conf/
 
+See `etc/inreach.service` for system integration.
+
+Deploy via "git push" can be accomplished with help
+from `etc/hooks/post-receive`
+
+
+== Running the code ==
+
+Install:
+
+    npm install --save --unsafe-perm=true
+    npm audit fix
+    (repeat)
+
+Set env vars:
+
+    INREACH_PORT=7997
+    NODE_PATH=/path/to/inreach-portal-nodeorm/node_modules
+    NODE_ENV=production
+    npm_config_cache=/path/to/home/of/user/inreach/.npm
+    TZ=UTC
+    PATH=...(include node on the path)...
+
+Run:
+
+    npm start
+
+We can try to get the cache out of user's homedir with env var, cmdline arg, .npmrc.
+
+
+== Testing ==
+
+Simple test:
+
+    curl -d @doc/event.json -X POST -H 'Content-Type: application/json' http://localhost:3000/inreach
+    curl http://localhost:3000/inreach
+
 You also need to setup a system/daemon/nologin user/group "inreach"
 and allow the user to write to the log/ directory
 (either "chown inreach log" or "chgrp inreach log").
+
+
+== OLD forever notes ==
+
+* forever has another security bug besides what's below,
+  and new version doesn't immediately/easily work
+  - instead we should be using systemd features now
+* minimatch is a continual problem with any npm
 
 We run the server daemon with "forever" from npm:
 
@@ -42,9 +87,3 @@ just globablly install the latest (or whatever version it wants)
 forever maintains its state in `../.forever` -- if you test
 the daemon as another user, you'll need to delete this dir
 before running as a system service so user inreach can write it.
-
-See `etc/init.d/inreach-portal` or `etc/inreach.service`
-for system integration.
-
-Deploy via "git push" can be accomplished with help
-from `etc/hooks/post-receive`

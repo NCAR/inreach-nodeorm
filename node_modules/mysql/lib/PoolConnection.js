@@ -1,6 +1,6 @@
-var inherits = require('util').inherits;
-var Connection = require('./Connection')
-var __changeUser = Connection.prototype.changeUser;
+var inherits   = require('util').inherits;
+var Connection = require('./Connection');
+var Events     = require('events');
 
 module.exports = PoolConnection;
 inherits(PoolConnection, Connection);
@@ -8,26 +8,28 @@ inherits(PoolConnection, Connection);
 function PoolConnection(pool, options) {
   Connection.call(this, options);
   this._pool  = pool;
-  this._purge = false
+
+  // Bind connection to pool domain
+  if (Events.usingDomains) {
+    this.domain = pool.domain;
+  }
 
   // When a fatal error occurs the connection's protocol ends, which will cause
   // the connection to end as well, thus we only need to watch for the end event
   // and we will be notified of disconnects.
   this.on('end', this._removeFromPool);
-  this.on('error', this._removeFromPool);
+  this.on('error', function (err) {
+    if (err.fatal) {
+      this._removeFromPool();
+    }
+  });
 }
-
-PoolConnection.prototype.changeUser = function changeUser(options, callback) {
-  this._purge = true;
-
-  return __changeUser.apply(this, arguments);
-};
 
 PoolConnection.prototype.release = function release() {
   var pool = this._pool;
 
   if (!pool || pool._closed) {
-    return;
+    return undefined;
   }
 
   return pool.releaseConnection(this);
@@ -37,20 +39,21 @@ PoolConnection.prototype.release = function release() {
 PoolConnection.prototype._realEnd = Connection.prototype.end;
 
 PoolConnection.prototype.end = function () {
-  console.warn( 'Calling conn.end() to release a pooled connection is '
-              + 'deprecated. In next version calling conn.end() will be '
-              + 'restored to default conn.end() behavior. Use '
-              + 'conn.release() instead.'
-              );
+  console.warn(
+    'Calling conn.end() to release a pooled connection is ' +
+    'deprecated. In next version calling conn.end() will be ' +
+    'restored to default conn.end() behavior. Use ' +
+    'conn.release() instead.'
+  );
   this.release();
 };
 
 PoolConnection.prototype.destroy = function () {
+  Connection.prototype.destroy.apply(this, arguments);
   this._removeFromPool(this);
-  return Connection.prototype.destroy.apply(this, arguments);
 };
 
-PoolConnection.prototype._removeFromPool = function(connection) {
+PoolConnection.prototype._removeFromPool = function _removeFromPool() {
   if (!this._pool || this._pool._closed) {
     return;
   }
@@ -58,5 +61,5 @@ PoolConnection.prototype._removeFromPool = function(connection) {
   var pool = this._pool;
   this._pool = null;
 
-  pool._removeConnection(this);
+  pool._purgeConnection(this);
 };

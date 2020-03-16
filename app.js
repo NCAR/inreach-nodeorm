@@ -1,6 +1,7 @@
 process.env.TZ='UTC';
 
-var fs = require('fs-ext');
+var fs = require('fs');
+const {flock} = require('fs-ext');
 
 var express = require('express');
 var path = require('path');
@@ -21,7 +22,7 @@ app.set('helpers',helpers);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
@@ -52,8 +53,8 @@ app.use(function(req, res, next) {
 
   var logfile = path.join(__dirname, 'log', 'rawbody_log');
   req.on('end', function() {
-    fs.open(logfile, 'a', function(err, fd) {
-      fs.flock(fd, 'ex', function(err) {
+    const fd = fs.openSync(logfile, 'a');
+    flock(fd, 'ex', function(err) {
         if (err) {
           console.log("Couldn't lock rawbody logfile");
         } else if (req.rawBody.length > 0) {
@@ -63,7 +64,6 @@ app.use(function(req, res, next) {
         }
         fs.closeSync(fd);
       });
-    });
   });
 
   next();
