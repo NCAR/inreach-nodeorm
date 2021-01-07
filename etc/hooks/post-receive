@@ -6,5 +6,4 @@ cd ..
 export GIT_DIR;GIT_DIR='.git'
 export GIT_WORK_TREE;GIT_WORK_TREE='.'
 /usr/bin/git reset --hard master
-
-# (forever will watch and restart on changes)
+/usr/bin/sudo /usr/bin/systemctl restart inreach.service
