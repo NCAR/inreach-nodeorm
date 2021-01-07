@@ -24,7 +24,7 @@ Environment=npm_config_cache=/usr/local/inreach/.npm
 
 ExecStart=/usr/local/node/bin/npm start
 
-Restart=on-failure
+Restart=always
 RestartSec=10s
 StartLimitBurst=5
 TimeoutStartSec=10

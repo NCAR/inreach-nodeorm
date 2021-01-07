@@ -1,89 +1,104 @@
-== Install notes ==
+= Install notes =
+
+== Database ==
 
 Create a database with schema from "db.sql"
 and user with "select,insert,update" privileges
 
-See the example config files in conf/
-
-See `etc/inreach.service` for system integration.
-
-Deploy via "git push" can be accomplished with help
-from `etc/hooks/post-receive`
+Set the example config file(s) in conf/
+-- database connection info in `index.js`
 
 
 == Running the code ==
 
-Install:
+Install node and make sure it's in your shell command path.
+
+Install and update node modules (as your own normal system user):
 
     npm install --save --unsafe-perm=true
     npm audit fix
     (repeat)
 
+Modules are committed to git. Some may need native compiled
+code (esp. `fs-ext` or other system-interface modules)
+and need rebuilding. When you try to start the app later,
+npm should tell you if you need to `npm rebuild`, but you
+can also do so anytime.
+
 Set env vars:
 
-    INREACH_PORT=7997
     NODE_PATH=/path/to/inreach-portal-nodeorm/node_modules
     NODE_ENV=production
-    npm_config_cache=/path/to/home/of/user/inreach/.npm
+
+    npm_config_cache=/path/to/home/of/user/.npm
+       => your home for dev, the daemon user for prod
+       => not used when running but must be set
+
     TZ=UTC
-    PATH=...(include node on the path)...
+    PATH=...(make sure node on the path)...
+
+Optional env vars:
+
+    INREACH_PORT=7997   (default 3000)
+
+Setup database and its access config. Copy and edit `conf/index.js`
 
 Run:
 
     npm start
 
-We can try to get the cache out of user's homedir with env var, cmdline arg, .npmrc.
+TODO:
+  * Try to get the npm cache out of user's homedir with env var, cmdline arg, .npmrc.
 
 
 == Testing ==
 
+The Garmin API uses a POST to send us data.
+This app also responds to a GET request with simple HTML
+listing the latest locations of each device.
+
 Simple test:
 
+    curl http://localhost:3000/inreach
     curl -d @doc/event.json -X POST -H 'Content-Type: application/json' http://localhost:3000/inreach
     curl http://localhost:3000/inreach
 
-You also need to setup a system/daemon/nologin user/group "inreach"
-and allow the user to write to the log/ directory
-(either "chown inreach log" or "chgrp inreach log").
+The first GET should return no events for a fresh database.
+The example data file can be POSTed and then view in the final GET.
 
 
-== OLD forever notes ==
+== Deploy ==
 
-* forever has another security bug besides what's below,
-  and new version doesn't immediately/easily work
-  - instead we should be using systemd features now
-* minimatch is a continual problem with any npm
+See `etc/inreach.service` for example systemd integration.
 
-We run the server daemon with "forever" from npm:
+The example service file runs the app as the
+system/daemon/nologin user/group "inreach".
+This user needs to write to the log/ directory:
 
-    npm install -g forever@0.14.2
+    chgrp inreach log
 
-If you're using a yum-installed node/npm then you'll need "sudo".
-If you're using forever version >0.14.2 then you have to
-manually fix the installed forever-monitor code to properly
-log the change that causes a restart. See:
+(Remember to remove any log files left from initial tests
+before starting the service.)
 
-    https://github.com/foreverjs/forever-monitor/pull/144/files
+This user also needs a real home directory for npm.
+In addition to, or despite `npm_config_cache` it will
+also write to `~/.config/configstore/update-notifier-npm.json`
+and possibly more.
 
-*** Be careful about upgrading forever. It's forever-monitor
-subpackage depends upon an old version of ps-tree which
-in turn depends upon an old version of event-stream.
-Newer event-stream versions (e.g. 3.3.x) have security problems
-due to unknown injected code from the flatmap-stream package.
-Check version numbers to verify.
+Deploy via "git push" can be accomplished with help
+from `etc/hooks/post-receive`. If doing so, it is recommended
+that sudo be configured to allow restart.
 
-    npm -g ls event-stream flatmap-stream
-    https://github.com/indexzero/ps-tree/issues/33
-    https://github.com/dominictarr/event-stream/issues/116
 
-:(
+== Related services ==
 
-You may also be scolded by npm about package "minimatch". If so,
-just globablly install the latest (or whatever version it wants)
-(again perhaps with sudo):
+You probably want a reverse proxy on your webserver
+to expose this service to the world:
 
-    npm install -g minimatch
+    # production Garmin/DeLorme InReach IPC Outbound service (w/disallow CORS)
+    RewriteRule ^/inreach http://127.0.0.1:7997%{REQUEST_URI} [P,QSA,L,E=ORIGIN_DOMAIN:null,E=ALLOW_HEADER:null,E=ALLOW_METHOD:none]
 
-forever maintains its state in `../.forever` -- if you test
-the daemon as another user, you'll need to delete this dir
-before running as a system service so user inreach can write it.
+You probably want to do something with the data other than
+the basic HTML provided by this service. The catalog `product_scripts`
+repo contains the script `jja/inreach_kml` to create a KML file
+suitable for Catalog-Maps.
