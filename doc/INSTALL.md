@@ -1,6 +1,6 @@
-= Install notes =
+# Install notes
 
-== Database ==
+## Database
 
 Create a database with schema from "db.sql"
 and user with "select,insert,update" privileges
@@ -9,7 +9,7 @@ Set the example config file(s) in conf/
 -- database connection info in `index.js`
 
 
-== Running the code ==
+## Running the code
 
 Install node and make sure it's in your shell command path.
 
@@ -51,7 +51,7 @@ TODO:
   * Try to get the npm cache out of user's homedir with env var, cmdline arg, .npmrc.
 
 
-== Testing ==
+## Testing
 
 The Garmin API uses a POST to send us data.
 This app also responds to a GET request with simple HTML
@@ -67,7 +67,7 @@ The first GET should return no events for a fresh database.
 The example data file can be POSTed and then view in the final GET.
 
 
-== Deploy ==
+## Deploy
 
 See `etc/inreach.service` for example systemd integration.
 
@@ -90,7 +90,7 @@ from `etc/hooks/post-receive`. If doing so, it is recommended
 that sudo be configured to allow restart.
 
 
-== Related services ==
+## Related services
 
 You probably want a reverse proxy on your webserver
 to expose this service to the world:
