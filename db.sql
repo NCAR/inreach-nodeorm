@@ -128,19 +128,7 @@ INSERT INTO `inreach_message_code` VALUES (3099,'Canned Message','A Quicktext me
 /*!40000 ALTER TABLE `inreach_message_code` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `platform_imei`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `platform_imei` (
-  `platform_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `imei` varchar(15) NOT NULL DEFAULT '',
-  PRIMARY KEY (`platform_id`,`imei`),
-  KEY `platform_id` (`imei`)
---  CONSTRAINT `platform_imei_1` FOREIGN KEY (`platform_id`) REFERENCES `zith9`.`platform` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
