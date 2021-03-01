@@ -99,6 +99,6 @@ to expose this service to the world:
     RewriteRule ^/inreach http://127.0.0.1:7997%{REQUEST_URI} [P,QSA,L,E=ORIGIN_DOMAIN:null,E=ALLOW_HEADER:null,E=ALLOW_METHOD:none]
 
 You probably want to do something with the data other than
-the basic HTML provided by this service. The catalog `product_scripts`
-repo contains the script `jja/inreach_kml` to create a KML file
-suitable for Catalog-Maps.
+the basic HTML provided by this service. For NCAR/EOL,
+the catalog `product_scripts` repo contains the script
+`jja/inreach_kml` to create a KML file suitable for Catalog-Maps.
