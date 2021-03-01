@@ -1,0 +1,37 @@
+[Unit]
+Description=InReach data ingest service
+RequiresMountsFor=/usr/local/inreach
+After=network-online.target
+#OnFailure=stopped-email@%n.service
+
+[Service]
+Type=simple
+User=inreach
+Group=inreach
+LimitCORE=0
+SyslogIdentifier=inreach
+WorkingDirectory=/usr/local/inreach/inreach-portal-nodeorm
+
+Environment=INREACH_PORT=7997
+Environment=NODE_PATH=/usr/local/inreach/inreach-portal-nodeorm/node_modules
+Environment=NODE_ENV=production
+Environment=TZ=UTC
+Environment=PATH=/usr/local/node/bin:/usr/local/bin:/usr/bin:/opt/local/bin
+Environment=npm_config_cache=/usr/local/inreach/.npm
+
+# do this manually, along with "npm audit" and any fixes
+#ExecStartPre=/usr/local/node/bin/npm install --save
+
+ExecStart=/usr/local/node/bin/npm start
+
+Restart=always
+RestartSec=10s
+StartLimitBurst=5
+TimeoutStartSec=10
+# (TimeoutSec + RestartSec) * StartLimitBurst <= StartLimitInterval
+StartLimitInterval=180
+
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

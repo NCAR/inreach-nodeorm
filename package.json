@@ -1,0 +1,32 @@
+{
+  "name": "inreach-portal-nodeorm",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.5",
+    "core-js": "^3.0.0",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "express-winston": "^4.0.3",
+    "fs-ext": "^2.0.0",
+    "pug": "^2.0.4",
+    "morgan": "^1.9.1",
+    "mysql": "^2.18.1",
+    "orm": "^5.0.5",
+    "orm-timestamps": "^0.5.2",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.2.1"
+  },
+  "description": "DeLorme inReach Connect Portal for IPC Outbound service using Node.js, Express, and node-orm2",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "file:///net/cds/git/emdac/inreach-portal-nodeorm"
+  },
+  "author": "John J. Allison <jja@ucar.edu>",
+  "license": "ISC"
+}

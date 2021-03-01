@@ -1,0 +1,9 @@
+#!/bin/bash
+
+umask 002
+
+cd ..
+export GIT_DIR;GIT_DIR='.git'
+export GIT_WORK_TREE;GIT_WORK_TREE='.'
+/usr/bin/git reset --hard master
+/usr/bin/sudo /usr/bin/systemctl restart inreach.service
