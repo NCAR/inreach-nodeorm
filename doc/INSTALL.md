@@ -11,7 +11,8 @@ Set the example config file(s) in conf/
 
 ## Running the code
 
-Install node and make sure it's in your shell command path.
+Install node v14 and make sure it's in your shell command path.
+node v16 doesn't work: fs-ext won't compile on centos7 with g++ 4.8.
 
 Install and update node modules (as your own normal system user):
 
